@@ -2,4 +2,4 @@
 Classic Ping Pong built with C++ and OpenGL.
 
 ## 🎥 Demo
-![Demo](assets/demo.mp4)
+![Demo](screenshots/PingPongDemo.mp4)
