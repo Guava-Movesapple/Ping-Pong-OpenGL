@@ -1,2 +1,2 @@
 # Ping-Pong-OpenGL
-Classic Pong built with C++ and OpenGL.
+Classic Ping Pong built with C++ and OpenGL.
