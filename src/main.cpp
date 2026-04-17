@@ -5,6 +5,8 @@
 #include "glm/glm.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <thread>
+#include <chrono>
 
 
 void start() {
@@ -82,7 +84,7 @@ int main(){
 	glm::mat4 model1 = glm::translate(glm::mat4(1.0f), glm::vec3(-0.95f, 0.0f, 0.0f));
 	glm::mat4 model2 = glm::translate(glm::mat4(1.0f), glm::vec3(0.95f, 0.0f, 0.0f));
 	glm::vec2 ballDirection(0.0f, 0.0f);
-	float ballSpeed = 0.0001f;
+	float ballSpeed = 0.02f;
 	//ballDirection = glm::normalize(ballDirection);
 	glm::mat4 ballModel(1.0f);
 
@@ -94,6 +96,8 @@ int main(){
 
 
 	while (!glfwWindowShouldClose(pingpong)) {
+
+		double startTime = glfwGetTime();
 
 
 		if (glfwGetKey(pingpong, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -126,7 +130,7 @@ int main(){
 			goto render;
 		}
 		
-		if (ballModel[3][0] < -0.9f && ballModel[3][0] > -0.91f && (ballModel[3][1] > player1Position - vertices[1] && ballModel[3][1] < player1Position + vertices[1])) {
+		if (ballModel[3][0] < -0.9f && ballModel[3][0] > -0.92f && (ballModel[3][1] > player1Position - vertices[1] && ballModel[3][1] < player1Position + vertices[1])) {
 			ballDirection[0] *= -1;
 
 			float ballDirectionY = 0.3f + (((ballModel[3][1] - player1Position) / 0.5f) * 3.0f);
@@ -136,7 +140,7 @@ int main(){
 			ballModel = glm::translate(ballModel, glm::vec3(ballDirection, 0.0f) * ballSpeed);
 		}
 
-		if (ballModel[3][0] > 0.9f && ballModel[3][0] < 0.91f && (ballModel[3][1] > player2Position - vertices[1] && ballModel[3][1] < player2Position + vertices[1])) {
+		if (ballModel[3][0] > 0.9f && ballModel[3][0] < 0.92f && (ballModel[3][1] > player2Position - vertices[1] && ballModel[3][1] < player2Position + vertices[1])) {
 			ballDirection[0] *= -1;
 
 			float ballDirectionY = 0.3 + (((ballModel[3][1] - player2Position) / 0.5f) * 3);
@@ -147,21 +151,21 @@ int main(){
 		}
 
 		if (glfwGetKey(pingpong, GLFW_KEY_W) == GLFW_PRESS && player1Position < 0.74f) {
-			player1Position += 0.0001f;
-			model1 = glm::translate(model1, glm::vec3(0.0f, 0.0001f, 0.0f));
+			player1Position += 0.02f;
+			model1 = glm::translate(model1, glm::vec3(0.0f, 0.02f, 0.0f));
 		}
 		else if (glfwGetKey(pingpong, GLFW_KEY_S) == GLFW_PRESS && player1Position > -0.74f) {
-			player1Position -= 0.0001f;
-			model1 = glm::translate(model1, glm::vec3(0.0f, -0.0001f, 0.0f));
+			player1Position -= 0.02f;
+			model1 = glm::translate(model1, glm::vec3(0.0f, -0.02f, 0.0f));
 		}
 
 		if (glfwGetKey(pingpong, GLFW_KEY_UP) == GLFW_PRESS && player2Position < 0.74f) {
-			player2Position += 0.0001f;
-			model2 = glm::translate(model2, glm::vec3(0.0f, 0.0001f, 0.0f));
+			player2Position += 0.02f;
+			model2 = glm::translate(model2, glm::vec3(0.0f, 0.02f, 0.0f));
 		}
 		else if (glfwGetKey(pingpong, GLFW_KEY_DOWN) == GLFW_PRESS && player2Position > -0.74f) {
-			player2Position -= 0.0001f;
-			model2 = glm::translate(model2, glm::vec3(0.0f, -0.0001f, 0.0f));
+			player2Position -= 0.02f;
+			model2 = glm::translate(model2, glm::vec3(0.0f, -0.02f, 0.0f));
 		}
 
 		ballModel = glm::translate(ballModel, glm::vec3(ballDirection, 0.0f) * ballSpeed);
@@ -194,6 +198,11 @@ int main(){
 
 		glfwSwapBuffers(pingpong);
 		glfwPollEvents();
+
+
+		double sleepTime =0.01667f - (glfwGetTime() - startTime);
+		std::this_thread::sleep_for(std::chrono::duration<double>(sleepTime));
+
 	}
 
 	return 0;
